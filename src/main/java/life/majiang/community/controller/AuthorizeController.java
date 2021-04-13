@@ -16,7 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -40,7 +42,8 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name="state") String state,
-                           HttpServletRequest request) throws IOException {
+                           HttpServletRequest request,
+                           HttpServletResponse response) throws IOException {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
@@ -50,14 +53,20 @@ public class AuthorizeController {
         String accessToken=githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser=githubProvider.getUser(accessToken);
         if(githubUser!=null){
+            //使用github验证成功以后，就登录，填充用户对象
             User user=new User();
-            user.setToken(UUID.randomUUID().toString());
+            //随机生成token
+            String token=UUID.randomUUID().toString();
+            //填充user对象
+            user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            //插入数据
             userMapper.insert(user);
-
+            //将token写入cookie
+            response.addCookie(new Cookie("token",token));
             //登录成功，写kookie和session
             request.getSession().setAttribute("githubUser",githubUser);
             //重定向，如果不写redrect的话地址栏会带上参数，然后渲染成index。写了会去掉参数重定向到index
