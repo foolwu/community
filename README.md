@@ -3,7 +3,7 @@
 ## 资料
 [Spring文档](https://spring.io/guides)
 
-[参考网站ES社区](https://elasticsedrch.cn/explore)
+[参考网站ES社区](https://elasticsearch.cn/)
 
 [BootStrap文档](https://v3.bootcss.com/getting-started/)
 

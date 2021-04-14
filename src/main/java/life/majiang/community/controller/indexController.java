@@ -1,22 +1,32 @@
 package life.majiang.community.controller;
 
+import life.majiang.community.Entity.Question;
 import life.majiang.community.Entity.User;
+import life.majiang.community.dto.QuestionDTO;
 import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class indexController {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private QuestionService questionService;
     //表示什么都不输入的时候默认访问index
     @GetMapping("/")
-    public String index(HttpServletRequest request){
+    public String index(HttpServletRequest request,
+                        Model model ){
         Cookie[] cookies=request.getCookies();
+        //当cookies不为空的时候才进行取值操作，否则不做操作
+        if(cookies!=null&&cookies.length!=0)
         //读取token
         for (Cookie cookie:cookies){
             if(cookie.getName().equals("token")){
@@ -30,6 +40,9 @@ public class indexController {
             }
             break;
         }
+
+        List<QuestionDTO> questionList=questionService.List();
+        model.addAttribute("questions",questionList);
         return "index";
     }
 }

@@ -63,12 +63,13 @@ public class AuthorizeController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             //插入数据
             userMapper.insert(user);
             //将token写入cookie
             response.addCookie(new Cookie("token",token));
             //登录成功，写kookie和session
-            request.getSession().setAttribute("githubUser",githubUser);
+            request.getSession().setAttribute("user",githubUser);
             //重定向，如果不写redrect的话地址栏会带上参数，然后渲染成index。写了会去掉参数重定向到index
             return "redirect:/";
         }else{

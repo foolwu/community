@@ -1,16 +1,21 @@
-<!-- 总的背景颜色 -->
+
 body{
-    background-color: #efefef;
+    background-color:#dfdfdf;
 }
-<!-- 文章输入区背景颜色 -->
 .main{
     background-color:white ;
     margin: 30px;
 }
-<!-- 发布按钮样式 -->
-<!-- 靠右 -->
-<!-- 下边距15px -->
 .btn-publish{
     float: right;
     margin-bottom: 15px
+}
+.media-object {
+    width: 35px;
+    height: 35px;
+}
+.text-desc {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
 }
