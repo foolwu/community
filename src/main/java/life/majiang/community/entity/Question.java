@@ -1,4 +1,4 @@
-package life.majiang.community.Entity;
+package life.majiang.community.entity;
 
 public class Question {
     private Integer id;

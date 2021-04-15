@@ -1,15 +1,11 @@
 package life.majiang.community.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import life.majiang.community.Entity.User;
+import life.majiang.community.entity.User;
 import life.majiang.community.dto.AccessTokenDTO;
 import life.majiang.community.dto.GithubUser;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.provider.GithubProvider;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import life.majiang.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -30,18 +26,20 @@ public class AuthorizeController {
 
     //@Value的作用是配置文件里读取相应名字的值并赋给当前变量
     @Value("${github.client.id}")
-    private String  clientId;
+    private String clientId;
     @Value("${github.client.secret}")
-    private String  clientSecret;
+    private String clientSecret;
     @Value("${github.redirect.uri}")
-    private String  redirectUri;
+    private String redirectUri;
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/callback")
-    public String callback(@RequestParam(name="code") String code,
-                           @RequestParam(name="state") String state,
+    public String callback(@RequestParam(name = "code") String code,
+                           @RequestParam(name = "state") String state,
                            HttpServletRequest request,
                            HttpServletResponse response) throws IOException {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
@@ -50,32 +48,42 @@ public class AuthorizeController {
         accessTokenDTO.setCode(code);
         accessTokenDTO.setRedirect_uri(redirectUri);
         accessTokenDTO.setState(state);
-        String accessToken=githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser githubUser=githubProvider.getUser(accessToken);
-        if(githubUser!=null){
+        String accessToken = githubProvider.getAccessToken(accessTokenDTO);
+        GithubUser githubUser = githubProvider.getUser(accessToken);
+        if (githubUser != null) {
             //使用github验证成功以后，就登录，填充用户对象
-            User user=new User();
+            User user = new User();
             //随机生成token
-            String token=UUID.randomUUID().toString();
+            String token = UUID.randomUUID().toString();
             //填充user对象
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatar_url());
-            //插入数据
-            userMapper.insert(user);
+            user.setBio(String.valueOf(githubUser.getBio()));
+            userService.createOrUpdate(user);
             //将token写入cookie
-            response.addCookie(new Cookie("token",token));
+            response.addCookie(new Cookie("token", token));
             //登录成功，写kookie和session
-            request.getSession().setAttribute("user",githubUser);
+            request.getSession().setAttribute("user", githubUser);
             //重定向，如果不写redrect的话地址栏会带上参数，然后渲染成index。写了会去掉参数重定向到index
             return "redirect:/";
-        }else{
+        } else {
             //登录失败，重新登录
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,HttpServletResponse response){
+        //移除session
+        request.getSession().removeAttribute("user");
+        //通过建立重名cookie移除cookies
+        Cookie cookie=new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        //
+        return "redirect:/";
     }
 
 }
