@@ -4,6 +4,8 @@ import life.majiang.community.entity.Question;
 import life.majiang.community.entity.User;
 import life.majiang.community.dto.PageDTO;
 import life.majiang.community.dto.QuestionDTO;
+import life.majiang.community.exception.CustomizeErrorCode;
+import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
 import org.springframework.beans.BeanUtils;
@@ -93,6 +95,11 @@ public class QuestionService {
 
     public QuestionDTO getById(int id) {
         Question question=questionMapper.getById(id);
+        //错误处理
+        //如果查询的文章不存在，直接跳到异常并进行相应提示
+        if (question==null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO=new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         User user=userMapper.findById(question.getCreator());
@@ -111,5 +118,11 @@ public class QuestionService {
             question.setGmtModified(System.currentTimeMillis());
             questionMapper.update(question);
         }
+    }
+
+
+    //更新阅读数
+    public void updateViewById(int id) {
+        questionMapper.updateViewById(id);
     }
 }

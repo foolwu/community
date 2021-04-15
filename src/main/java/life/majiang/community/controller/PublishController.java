@@ -33,7 +33,7 @@ public class PublishController {
     public String doPublish(@RequestParam(value = "title") String title,
                             @RequestParam(value = "description") String description,
                             @RequestParam(value = "tag") String tag,
-                            @RequestParam(value = "id") int id,
+                            @RequestParam(value = "id") Integer id,
                             HttpServletRequest request,
                             Model model) {
         //将信息放到model里，用来将已经填好的信息回显到页面
@@ -75,7 +75,7 @@ public class PublishController {
 
     //编辑跳转
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name="id") int id,Model model){
+    public String edit(@PathVariable(name="id") Integer id,Model model){
         QuestionDTO question=questionService.getById(id);
 
         //将信息放到model里，用来将已经填好的信息回显到页面
