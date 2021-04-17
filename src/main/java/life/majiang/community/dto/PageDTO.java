@@ -3,9 +3,9 @@ package life.majiang.community.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PageDTO<Questiondto> {
-    //问题内容
-    private List<Questiondto> questions;
+public class PageDTO<T> {
+    //内容容器
+    private List<T> data;
     //是否展示前一页
     private boolean showPre;
     //是否展示后一页
@@ -79,12 +79,12 @@ public class PageDTO<Questiondto> {
     }
 
     //getter and setter方法
-    public List<Questiondto> getQuestions() {
-        return questions;
+    public List<T> getData() {
+        return data;
     }
 
-    public void setQuestions(List<Questiondto> questions) {
-        this.questions = questions;
+    public void setData(List<T> data) {
+        this.data = data;
     }
 
     public boolean isShowPre() {

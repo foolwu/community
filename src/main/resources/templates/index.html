@@ -9,6 +9,15 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.js" type="application/javascript"></script>
 </head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable = window.localStorage.getItem("closable");
+        if (closable == "true") {
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
 <body>
 <!-- 上方导航栏-->
 <div th:insert="~{navigation::nav}"></div>
@@ -20,7 +29,7 @@
             <h3><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>发现</h3>
             <!--分隔线-->
             <hr>
-            <div class="media" th:each="question:${pageDTO.questions}">
+            <div class="media" th:each="question:${pageDTO.data}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-thumbnail"
@@ -31,11 +40,11 @@
                     <h4 class="media-heading">
                         <a th:href="@{'/article/'+${question.id}}" th:text="${question.title}"></a>
                     </h4>
-                    <span th:text="${question.description}"></span><br>
+<!--                    <span th:text="${question.description}"></span><br>-->
                     <span class="text-desc">
                         <span th:text="${question.commentCount}"></span>个回复·
                         <span th:text="${question.viewCount}"></span>个浏览·
-                        <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>小时前
+                        <span th:text="${#dates.format(question.gmtModified,'yyyy-MM-dd HH:mm')}"></span>更新
                     </span>
                 </div>
             </div>
@@ -75,5 +84,6 @@
         </div>
     </div>
 </div>
+<div th:insert="~{footer :: foot}"></div>
 </body>
 </html>

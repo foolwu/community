@@ -9,10 +9,10 @@ public class QuestionDTO {
     private String tag;
     private Long gmtCreate;
     private Long gmtModified;
-    private Integer creator;
-    private Integer viewCount;
-    private Integer commentCount;
-    private Integer likeCount;
+    private int creator;
+    private Long viewCount;
+    private Long commentCount;
+    private Long likeCount;
     private User user;
 
     public int getId() {
@@ -63,35 +63,35 @@ public class QuestionDTO {
         this.gmtModified = gmtModified;
     }
 
-    public Integer getCreator() {
+    public int getCreator() {
         return creator;
     }
 
-    public void setCreator(Integer creator) {
+    public void setCreator(int creator) {
         this.creator = creator;
     }
 
-    public Integer getViewCount() {
+    public Long getViewCount() {
         return viewCount;
     }
 
-    public void setViewCount(Integer viewCount) {
+    public void setViewCount(Long viewCount) {
         this.viewCount = viewCount;
     }
 
-    public Integer getCommentCount() {
+    public Long getCommentCount() {
         return commentCount;
     }
 
-    public void setCommentCount(Integer commentCount) {
+    public void setCommentCount(Long commentCount) {
         this.commentCount = commentCount;
     }
 
-    public Integer getLikeCount() {
+    public Long getLikeCount() {
         return likeCount;
     }
 
-    public void setLikeCount(Integer likeCount) {
+    public void setLikeCount(Long likeCount) {
         this.likeCount = likeCount;
     }
 

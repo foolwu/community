@@ -8,12 +8,13 @@ import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -22,13 +23,20 @@ public class QuestionService {
     private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
-
-    public PageDTO list(int page, int size) {
-
-        PageDTO pageDTO = new PageDTO();
+    public PageDTO list(int page, int size,String search,String tag) {
 
         //文章总数
-        int totalCount = questionMapper.count();
+        int totalCount;
+        //如果搜索参数不为空
+        if(StringUtils.isNotBlank(search)){
+            totalCount=questionMapper.countBySearch(search);
+        }else if(StringUtils.isNotBlank(tag)){
+            totalCount=questionMapper.countByTag(tag);
+        }else {
+            totalCount=questionMapper.count();
+        }
+
+        PageDTO pageDTO = new PageDTO();
 
         //先将数据输入，计算得到page的各项数据，例如总页数、是否有前一页后一页等
         pageDTO.setPagination(totalCount, page, size);
@@ -42,7 +50,14 @@ public class QuestionService {
         //size*{page-1}，到数据库取数据
         int offset = size * (page - 1);
         //拿到Question对象
-        List<Question> questions = questionMapper.list(offset, size);
+        List<Question> questions;
+        if(StringUtils.isNotBlank(search)){
+            questions=questionMapper.listBySearch(search,offset, size);
+        }else if(StringUtils.isNotBlank(tag)){
+            questions=questionMapper.listByTag(tag,offset, size);
+        }else {
+            questions=questionMapper.list(offset, size);
+        }
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //遍历Question对象，将User对象一起输入到QuestionDTO
         for (Question question : questions) {
@@ -54,9 +69,10 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         //将QuestionDTO放到pageDTO对象，便于前端通过pageDTO拿到文章、页码等数据
-        pageDTO.setQuestions(questionDTOList);
+        pageDTO.setData(questionDTOList);
         return pageDTO;
     }
+
 
     public PageDTO listByUserId(int userId,int page, int size) {
 
@@ -74,6 +90,9 @@ public class QuestionService {
         if (page > pageDTO.getTotalPage()) {
             page = pageDTO.getTotalPage();
         }
+        if (page < 1) {
+            page = 1;
+        }
         //size*{page-1}，到数据库取数据
         int offset = size * (page - 1);
         //拿到Question对象
@@ -89,7 +108,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         //将QuestionDTO放到pageDTO对象，便于前端通过pageDTO拿到文章、页码等数据
-        pageDTO.setQuestions(questionDTOList);
+        pageDTO.setData(questionDTOList);
         return pageDTO;
     }
 
@@ -108,7 +127,7 @@ public class QuestionService {
     }
 
     public void createOrUpdate(Question question) {
-        if (question.getId()==null){
+        if (question.getId()==0){
             //插入新文章
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
@@ -122,7 +141,40 @@ public class QuestionService {
 
 
     //更新阅读数
-    public void updateViewById(int id) {
-        questionMapper.updateViewById(id);
+    public void updateViewById(int id,User user) {
+        //如果用户自己看自己的文章，不增加阅读数
+        if(user==null||user.getId()!=questionMapper.getCreatorIdById(id))
+        {
+            questionMapper.updateViewById(id);
+        }
+    }
+
+    public List<QuestionDTO> findRelatedArticle(QuestionDTO questionDTO) {
+        //如果该文章没有相关的标签，返回空List
+        if (StringUtils.isBlank(questionDTO.getTag())) {
+            return new ArrayList<>();
+        }
+        List<Question>  questions=new ArrayList<>(10);
+        //通过逗号将标签分割
+        String[] tags = StringUtils.split(questionDTO.getTag(), ",");
+        for (String tag:tags
+             ) {
+            //将不同的tag查询得到的question对象集合保存到list，可能有重复值
+           questions.addAll(questionMapper.findRelatedTag(tag));
+
+        }
+
+        //拿到的对象可能有重复的数据，根据id去重
+        List<Question> unique = questions.stream().collect(Collectors.collectingAndThen(
+                Collectors.toCollection(()->new TreeSet<>(Comparator.comparing(Question::getId))),ArrayList::new));
+        //将question赋值questionDTO
+        List<QuestionDTO> questionDTOS = unique.stream().map(q -> {
+            QuestionDTO questionDTO1 = new QuestionDTO();
+            BeanUtils.copyProperties(q, questionDTO1);
+            return questionDTO1;
+        }).collect(Collectors.toList());
+
+        return questionDTOS;
+
     }
 }
