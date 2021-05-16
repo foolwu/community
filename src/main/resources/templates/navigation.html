@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<body>
 <div th:fragment="nav">
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
@@ -39,7 +38,8 @@
                     </ul>
                 </li>
                 <li th:if="${session.user==null}">
-                    <a href="https://github.com/login/oauth/authorize?client_id=54920a01aa826eaee59f&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
+                 <!--   <a href="https://github.com/login/oauth/authorize?client_id=54920a01aa826eaee59f&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>-->
+              <a href="/login">登录</a>
                 </li>
             </ul>
         </div>

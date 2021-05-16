@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta name="referrer" content="no-referrer" />
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>登录</title>
+<!--   <link rel="icon" href="headpic/3.jpg" sizes="32x32">-->
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet"  href="/css/signin.css">
+    <link rel="icon" href="../images/logo.png" type="img/x-icon"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body >
+<div class="container">
+    <form class="form-signin" action="/logincheck" method="post">
+        <h2 class="form-signin-heading">请输入用户账号和密码 </h2>
+        <label for="email" class="sr-only">用户名</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="账号" required autofocus>
+        <label for="password" class="sr-only">密码</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="密码" required>
+<!--        <div class="checkbox">-->
+<!--            <label>-->
+<!--                <input type="checkbox" value="remember-me"> 记住我-->
+<!--            </label>-->
+<!--        </div>-->
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        <span><a href="/register" class="register">不管了，我选择重来</a></span>
+        <span><a href="https://github.com/login/oauth/authorize?client_id=54920a01aa826eaee59f&redirect_uri=http://localhost:8887/callback&scope=user&state=1" >GitHbu登录</a></span>
+    </form>
+</div> <!-- /container -->
+</body>
+</html>
