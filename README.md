@@ -1,6 +1,7 @@
 ## 技术交流社区
-
-## 资料
+技术栈
+Spring Boot+MySQL+Mybatis+BootStrap
+## 参考资料
 [Spring文档](https://spring.io/guides)
 
 [参考网站ES社区](https://elasticsearch.cn/)

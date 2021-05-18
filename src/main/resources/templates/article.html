@@ -125,7 +125,48 @@
                     </div>
                     <div class="media-body">
                         <h5 class="media-heading">
-                            <a th:href="@{'/article/'+${article.id}}" th:text="${article.user.getName()}"></a>
+<!--                            <a th:href="@{'/article/'+${article.id}}" th:text="${article.user.getName()}">-->
+                            <a data-toggle="modal" data-target="#myModal" th:text="${article.user.getName()}">
+                            </a>
+                            <!-- 模态框 -->
+                            <div class="modal fade" id="myModal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <!-- 模态框头部 -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">作者介绍</h4>
+                                            <button type="button" class="close" data-dismiss="modal">×</button>
+                                        </div>
+                                        <!-- 模态框主体 -->
+                                        <div class="modal-body">
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th style="text-align: center;">名字</th>
+                                                    <th style="text-align: center;">简介</th>
+                                                    <th style="text-align: center;">账号</th>
+                                                    <th style="text-align: center;">头像</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <th style="text-align: center;" th:text="${article.user.getName()}"></th>
+                                                    <th style="text-align: center;" th:text="${article.user.getBio()}"></th>
+                                                    <th style="text-align: center;" th:text="${article.user.getEmail()}"></th>
+                                                    <th style="text-align: center;">
+                                                        <img th:src="${article.user.getAvatarUrl()}" width="65" height="65" />
+                                                    </th>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- 模态框底部 -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                        </div>
+
+                                    </div>
+                                </div>
                         </h5>
                     </div>
                 </div>

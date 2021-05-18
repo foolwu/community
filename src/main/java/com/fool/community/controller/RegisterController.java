@@ -35,8 +35,9 @@ public class RegisterController {
         user.setPassword(password);
         user.setToken(token);
         user.setAccountId("1");
+        user.setBio("暂无");
        user.setName(username);
-       user.setAvatarUrl("https://avatars.githubusercontent.com/u/63496037?v=4");
+       user.setAvatarUrl("../img/headpic.jpg");
        user.setGmtCreate(System.currentTimeMillis());
         //如果查找用户不为null，则用户存在，重新注册，否则写入数据
         //如果数据库中有重复用户网页会出错

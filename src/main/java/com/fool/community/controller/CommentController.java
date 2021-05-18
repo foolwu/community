@@ -21,9 +21,6 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @Autowired
-    private CommentMapper commentMapper;
-
     //插入评论
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)

@@ -23,14 +23,11 @@ import java.util.List;
 @Service
 public class CommentService {
 
-    @Autowired
+    @Autowired(required = false)
     private CommentMapper commentMapper;
 
     @Autowired
     private ArticleMapper articleMapper;
-
-    @Autowired
-    private ArticleExtMapper articleExtMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -61,7 +58,7 @@ public class CommentService {
             }
             Article article = articleMapper.selectByPrimaryKey(dbComment.getParentId());
             if (article == null) {
-                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+                throw new CustomizeException(CustomizeErrorCode.ARTICLE_NOT_FOUND);
             }
             // 插入评论
             commentMapper.insert(comment);
@@ -76,13 +73,14 @@ public class CommentService {
             Article article = articleMapper.selectByPrimaryKey(comment.getParentId());
             //如果文章不存在
             if (article == null) {
-                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+                throw new CustomizeException(CustomizeErrorCode.ARTICLE_NOT_FOUND);
             }
             comment.setType(1);
             //插入文章评论
             commentMapper.insert(comment);
             //将文章的评论数加1
-            articleExtMapper.incCommentCount(article);
+            articleMapper.increaseCommentNumber(article);
+//            articleExtMapper.incCommentCount(article);
 
             // 创建通知
             //回复的是文章，那么接收者应该是文章的创建者，其父id应该是文章id

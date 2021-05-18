@@ -34,4 +34,7 @@ public interface UserMapper {
 
     @Update("update user set token=#{token},status='1' where id=#{id}")
     void setTokenAndStatusByUser(User user);
+
+    @Update("update user set name=#{name},bio=#{bio},gmt_modified=#{gmtModified},password=#{password},avatar_url=#{avatarUrl} where id=#{id}")
+    void updateUserByUser(User user);
 }

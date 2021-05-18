@@ -14,7 +14,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -121,7 +120,7 @@ public class ArticleService {
         //错误处理
         //如果查询的文章不存在，直接跳到异常并进行相应提示
         if (article ==null){
-            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            throw new CustomizeException(CustomizeErrorCode.ARTICLE_NOT_FOUND);
         }
         ArticleDTO articleDTO =new ArticleDTO();
         BeanUtils.copyProperties(article, articleDTO);

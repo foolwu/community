@@ -2,6 +2,8 @@ package com.fool.community.controller;
 
 import com.fool.community.entity.User;
 import com.fool.community.mapper.UserMapper;
+import com.fool.community.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,9 @@ public class LoginController {
     @Resource
     private UserMapper userMapper;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -26,13 +31,13 @@ public class LoginController {
 
     @PostMapping("/logincheck")
     public String checklogin(HttpServletRequest request, HttpServletResponse response) {
-        //通过request获取输入的用户名和密码在数据库中查找相关用户，如果存在并且是未登录状态就登录成功
+        //通过request获取输入的用户名和密码在数据库中查找相关用户，如果存在就登录成功
         User user = new User();
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         user.setEmail(email);
         user.setPassword(password);
-        User newUser = userMapper.findUser(user);
+        User newUser = userService.findUser(user);
         if (newUser != null) {
             String token=UUID.randomUUID().toString();
             user.setToken(token);

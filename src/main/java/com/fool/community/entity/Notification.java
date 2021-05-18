@@ -9,6 +9,7 @@ public class Notification {
     private Long gmtCreate;
     private Integer status;
     private int articleId;
+    private int articleStatus;
 
 
     public Long getId() {
@@ -65,5 +66,13 @@ public class Notification {
 
     public void setArticleId(int articleId) {
         this.articleId = articleId;
+    }
+
+    public int getArticleStatus() {
+        return articleStatus;
+    }
+
+    public void setArticleStatus(int articleStatus) {
+        this.articleStatus = articleStatus;
     }
 }

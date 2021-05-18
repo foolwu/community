@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
-public class indexController {
-    @Autowired
-    private UserMapper userMapper;
+public class IndexController {
     @Autowired
     private ArticleService articleService;
 

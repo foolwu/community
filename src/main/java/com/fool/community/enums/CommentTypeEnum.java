@@ -3,7 +3,7 @@ package com.fool.community.enums;
 //这个枚举类用来判断是回复的是文章还是评论
 public enum CommentTypeEnum {
     //文章类型
-    QUESTION(1),
+    ARTICLE(1),
     //评论类型
     COMMENT(2);
     private Integer type;

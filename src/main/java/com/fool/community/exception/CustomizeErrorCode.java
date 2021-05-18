@@ -5,7 +5,7 @@ package com.fool.community.exception;
 public enum CustomizeErrorCode implements ICustomizeErrorCode {
 
     //文章不存在
-    QUESTION_NOT_FOUND(2001, "你找到文章不在了，要不要换个试试？"),
+    ARTICLE_NOT_FOUND(2001, "你找到文章不在了，要不要换个试试？"),
     //未选中评论就进行回复
     TARGET_PARAM_NOT_FOUND(2002, "未选中任何问题或评论进行回复"),
     //未登录

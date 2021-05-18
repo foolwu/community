@@ -2,7 +2,11 @@ package com.fool.community.controller;
 
 import com.fool.community.dto.ArticleDTO;
 import com.fool.community.dto.CommentDTO;
+import com.fool.community.entity.Article;
 import com.fool.community.entity.User;
+import com.fool.community.exception.CustomizeErrorCode;
+import com.fool.community.exception.CustomizeException;
+import com.fool.community.mapper.ArticleMapper;
 import com.fool.community.service.CommentService;
 import org.springframework.stereotype.Controller;
 import com.fool.community.service.ArticleService;
@@ -21,15 +25,17 @@ public class ArticleController {
 
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private ArticleMapper articleMapper;
 
     @GetMapping("/article/{id}")
     public String article(@PathVariable(name = "id") int id, Model model,HttpServletRequest request) {
-        /*Long questionId = null;
-        try {
-            questionId = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            throw new CustomizeException(CustomizeErrorCode.INVALID_INPUT);
-        }*/
+        Article article = articleMapper.getById(id);
+        //错误处理
+        //如果查询的文章不存在，直接跳到异常,提示查看的文章不存在
+        if (article ==null){
+            throw new CustomizeException(CustomizeErrorCode.ARTICLE_NOT_FOUND);
+        }
         User user = (User) request.getSession().getAttribute("user");
         //包含用户信息的问题对象
         ArticleDTO articleDTO = articleService.getById(id);

@@ -67,4 +67,7 @@ public interface ArticleMapper {
 
     @Update("update article set status='0' where id=#{id}")
     void deleteArticleByArticleId(int id);
+
+    @Update("update article set comment_count=comment_count+1 where id = #{id}")
+    void increaseCommentNumber(Article article);
 }
