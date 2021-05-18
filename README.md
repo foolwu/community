@@ -1,6 +1,9 @@
 ## 技术交流社区
 技术栈
 Spring Boot+MySQL+Mybatis+BootStrap
+## 功能
+添加个人资料、密码修改功能\
+添加查看作者资料功能
 ## 参考资料
 [Spring文档](https://spring.io/guides)
 
