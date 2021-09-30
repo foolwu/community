@@ -1,8 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+
+    <meta name="referrer" content="no-referrer" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${sectionName}">我的文章</title>
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
@@ -49,7 +54,7 @@
 </head>
 <body>
 <!-- 上方导航栏-->
-<div th:insert="~{navigation::nav}"></div>
+<div th:insert="~{nav::nav}"></div>
 <!-- 下方区域-->
 <div class="container-fluid main home">
     <div class="row">
@@ -93,11 +98,12 @@
                 <div class="media" th:each="notification:${pageDTO.data}">
                     <div class="media-body" th:if="${notification.article!=null}">
                         <p class="media-heading">
-                            <a href="#"><span th:text="${notification.user.name}"></span></a>在你的文章
+                            <span th:text="${notification.user.name}"></span>
+                            在
                             <a th:href="@{'/notification/'+ ${notification.id}}"
-
                              th:text="${notification.article.title}">
-                            </a>下评论了
+                            </a>里
+                            <span th:text="${notification.typeName}"></span>
                             <span class="label label-danger" th:if="${notification.status == 0}">未读</span>
                         </p>
                     </div>
@@ -107,11 +113,11 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section == 'profile'}">
                 <!--用表将个人资料显示出来-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default table-responsive">
                         <!-- Default panel contents -->
-                        <div class="panel-heading">当前资料</div>
+                        <div class="panel-heading" style="text-align: center;">当前资料</div>
                         <!-- Table -->
-                        <table class="table">
+                        <table class="table text-nowrap">
                             <thead>
                                 <tr>
                                     <th style="text-align: center;">名字</th>
@@ -126,11 +132,8 @@
                                     <th style="text-align: center;" th:text="${session.user.getBio()}"></th>
                                     <th style="text-align: center;" th:text="${session.user.getEmail()}"></th>
                                     <th style="text-align: center;">
-                                        <img th:src="${session.user.getAvatarUrl()}" width="65" height="65" />
-<!--                                        <a href="#">-->
-<!--                                            <img class="media-object img-thumbnail"-->
-<!--                                                 th:src="${session.user.getAvatarUrl()}" >-->
-<!--                                        </a>-->
+<!--                                        <img th:src="${session.user.getAvatarUrl()}" width="100px" height="100px" />-->
+                                            <img th:src="${session.user.getAvatarUrl()}" class="media-object img-thumbnail" style="text-align: center;" >
                                     </th>
                                 </tr>
                             </tbody>
@@ -232,7 +235,7 @@
                 </a>
                 <a href="/home/message" th:class="${section=='message'}?'active list-group-item':'list-group-item'">
                     我的消息
-                    <span class="badge" th:text="${session.unReadCount}"></span>
+                    <span class="badge" th:text="${unReadCount}">111</span>
                 </a>
                 <a href="/home/profile" th:class="${section=='profile'}?'active list-group-item':'list-group-item'">
                     我的资料

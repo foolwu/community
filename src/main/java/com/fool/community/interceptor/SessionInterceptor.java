@@ -23,8 +23,6 @@ public class SessionInterceptor implements HandlerInterceptor {
     private UserMapper userMapper;
     @Autowired
     private NotificationService notificationService;
-    // @Autowired
-    // private AdService adService;
 
     @Value("${github.redirect.uri}")
     private String redirectUri;
@@ -32,11 +30,8 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //        设置 context 级别的属性
-//        request.getServletContext().setAttribute("redirectUri", redirectUri);
+        request.getServletContext().setAttribute("redirectUri", redirectUri);
         // 没有登录的时候也可以查看导航
-//        for (AdPosEnum adPos : AdPosEnum.values()) {
-//            request.getServletContext().setAttribute(adPos.name(), adService.list(adPos.name()));
-//        }
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {

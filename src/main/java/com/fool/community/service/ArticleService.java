@@ -190,4 +190,8 @@ public class ArticleService {
         articleMapper.deleteArticleByArticleId(id);
         notificationMapper.modifyArticleStatusByArticleId(id);
     }
+
+    public void addLikeNumber(Article article) {
+        articleMapper.addLikeNumber(article);
+    }
 }

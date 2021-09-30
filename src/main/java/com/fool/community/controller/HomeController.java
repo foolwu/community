@@ -54,7 +54,7 @@ public class HomeController {
             model.addAttribute("section","profile");
             model.addAttribute("sectionName","我的资料");
         }
-//        model.addAttribute("unReadCount",unReadCount);
+        model.addAttribute("unReadCount",unReadCount);
         return "home";
     }
 

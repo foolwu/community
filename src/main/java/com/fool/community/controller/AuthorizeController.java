@@ -64,7 +64,7 @@ public class AuthorizeController {
             userService.createOrUpdate(user);
             //将token写入cookie
             response.addCookie(new Cookie("token", token));
-            //登录成功，写kookie和session
+            //登录成功，写cookie和session
             request.getSession().setAttribute("user", githubUser);
             //重定向，如果不写redrect的话地址栏会带上参数，然后渲染成index。写了会去掉参数重定向到index
             return "redirect:/";

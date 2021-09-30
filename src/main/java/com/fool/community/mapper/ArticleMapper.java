@@ -70,4 +70,7 @@ public interface ArticleMapper {
 
     @Update("update article set comment_count=comment_count+1 where id = #{id}")
     void increaseCommentNumber(Article article);
+
+    @Update("update article set like_count=like_count+1 where id = #{id}")
+    void addLikeNumber(Article article);
 }

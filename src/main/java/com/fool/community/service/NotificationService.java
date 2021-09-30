@@ -52,7 +52,6 @@ public class NotificationService {
 
         List<NotificationDTO> notificationDTOList = new ArrayList<>();
 
-
         //我需要什么,消息的创建人（通过创建者id拿到），文章的名字（通过文章的id拿到），消息的种类（通过其type判断）
         for (Notification notification : notifications) {
             //通过消息里的创建者id得到创建者的
@@ -61,6 +60,8 @@ public class NotificationService {
             NotificationDTO notificationDTO = new NotificationDTO();
             //利用spring内置的工具类将notification的属性复制给notificationDTO
             BeanUtils.copyProperties(notification, notificationDTO);
+            //通过枚举类得到填充其类别
+            notificationDTO.setTypeName(NotificationTypeEnum.nameOfType(notification.getType()));
             //将创建者对象放进去
             notificationDTO.setUser(user);
             //将文章对象放进去

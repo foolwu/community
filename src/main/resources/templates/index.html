@@ -1,8 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta name="referrer" content="no-referrer" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>技术交流社区</title>
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="css/community.css"/>
@@ -46,7 +50,7 @@
 </script>
 <body>
 <!-- 上方导航栏-->
-<div th:insert="~{navigation::nav}"></div>
+<div th:insert="~{nav::nav}"></div>
 <!-- 下方文章区域-->
 <div class="container-fluid main">
     <div class="row">
@@ -68,6 +72,7 @@
                     </h4>
 <!--                    <span th:text="${article.description}"></span><br>-->
                     <span class="text-desc">
+                        <span th:text="${article.likeCount}"></span>个点赞·
                         <span th:text="${article.commentCount}"></span>个回复·
                         <span th:text="${article.viewCount}"></span>个浏览·
                         <span th:text="${#dates.format(article.gmtModified,'yyyy-MM-dd HH:mm')}"></span>更新

@@ -30,6 +30,8 @@ public class NotificationController {
         }
         //将消息状态该为已读
         NotificationDTO notificationDTO = notificationService.read(id, user);
+        long unReadCount=notificationService.countUnReadByUserId(user.getId());
+        request.getSession().setAttribute("unReadCount",unReadCount);
         //判断是不是跳转到文章
         if (NotificationTypeEnum.REPLY_COMMENT.getType() == notificationDTO.getType()
                 || NotificationTypeEnum.REPLY_ARTICLE.getType() == notificationDTO.getType()) {

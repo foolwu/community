@@ -1,19 +1,23 @@
 package com.fool.community.controller;
 
 import com.fool.community.dto.ArticleDTO;
+import com.fool.community.dto.CommentCreateDTO;
 import com.fool.community.dto.CommentDTO;
+import com.fool.community.dto.ResultDTO;
 import com.fool.community.entity.Article;
+import com.fool.community.entity.Comment;
 import com.fool.community.entity.User;
 import com.fool.community.exception.CustomizeErrorCode;
 import com.fool.community.exception.CustomizeException;
 import com.fool.community.mapper.ArticleMapper;
 import com.fool.community.service.CommentService;
+import com.fool.community.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import com.fool.community.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -27,6 +31,8 @@ public class ArticleController {
     private CommentService commentService;
     @Autowired
     private ArticleMapper articleMapper;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/article/{id}")
     public String article(@PathVariable(name = "id") int id, Model model,HttpServletRequest request) {
@@ -48,6 +54,22 @@ public class ArticleController {
         model.addAttribute("comments", comments);
         model.addAttribute("relatedQuestions", relatedArticle);
         return "article";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/like", method = RequestMethod.POST)
+    public Object post(@RequestBody ArticleDTO articleDTO,
+                       HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        //如果user为空，提示未登录
+        if (user == null) {
+            return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
+        }
+        Article article=new Article();
+        article.setId(articleDTO.getId());
+        articleService.addLikeNumber(article);
+        //返回登录成功
+        return ResultDTO.okOf();
     }
 
 }

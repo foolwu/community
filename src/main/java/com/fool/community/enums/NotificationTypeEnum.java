@@ -2,8 +2,8 @@ package com.fool.community.enums;
 
 
 public enum NotificationTypeEnum {
-    REPLY_ARTICLE(1, "回复了文章"),
-    REPLY_COMMENT(2, "回复了评论");
+    REPLY_ARTICLE(1, "评论了你的文章"),
+    REPLY_COMMENT(2, "回复了你的评论");
     private int type;
     private String name;
 

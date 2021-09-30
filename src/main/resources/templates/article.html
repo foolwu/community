@@ -1,10 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta name="referrer" content="no-referrer" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${article.title}">技术交流社区</title>
     <!-- <head th:insert="~{import :: head}"></head>
     <head th:insert="~{import :: markdown}"></head>-->
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
@@ -20,7 +24,7 @@
 
 </head>
 <body>
-<div th:insert="~{navigation :: nav}"></div>
+<div th:insert="~{nav :: nav}"></div>
 <div class="container-fluid main home">
     <div class="row">
         <!--左边主要内容-->
@@ -59,6 +63,12 @@
                         <span class="glyphicon glyphicon-pencil"aria-hidden="true">编辑</span>
                     </a>
                 </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <span>给文章点个Star吧！</span>
+                <button type="button" class="btn btn-default btn-lg" onclick="addLike(this)">
+                    Star<span class="glyphicon glyphicon-star" aria-hidden="true" th:text="${article.likeCount}"></span>
+                </button>
             </div>
             <!-- 一级评论-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -109,6 +119,31 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <!--            回复输入框-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>
+                    提交回复
+                </h4>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-sp">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="comment_section">
+                    <div class="media">
+                        <div class="media-left">
+                            <a href="#">
+                                <img class="media-object img-thumbnail"
+                                     th:src="${session.user != null ? session.user.avatarUrl : '/img/default_avatar.png'}">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h5 class="media-heading">
+                                <a th:href="@{'/article/'+${article.id}}" th:text="${session.user != null ? session.user.name : '未登录用户'}"></a>
+                            </h5>
+                        </div>
+                    </div>
+                    <input type="hidden" id="article_id" th:value="${article.id}">
+                    <textarea class="form-control comment" rows="6" id="comment_content"></textarea>
+                    <button type="button" class="btn btn-primary btn-comment" onclick="post()">回复</button>
                 </div>
             </div>
         </div>
@@ -164,14 +199,13 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                                         </div>
-
                                     </div>
                                 </div>
+                            </div>
                         </h5>
                     </div>
                 </div>
             </div>
-
             <hr class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>相关问题</h4>
@@ -181,50 +215,8 @@
             </div>
             <!--推荐学习-->
             <hr class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 side">
-                <h4>推荐学习</h4>
-                <div class="row">
-                    <div class="col-sm-6 col-md-4 article-notice">
-                        <div class="thumbnail">
-                            <a href="https://www.runoob.com/" target="_blank">
-                                <img src="/img/1.png" alt="菜鸟教程">
-                            </a>
-                            <div class="caption">
-                                <h4>学的不仅是技术，更是梦想！</h4>
-                                <!--                        <p>提供了大量的在线实例，通过实例，可以更好地学习如何建站。-->
-                                <!--                            致力于推广各种编程语言技术，所有资源是完全免费的，并且会根据当前互联网的变化实时更新本站内容</p>-->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!--推荐区-->
-<!--            <div th:insert="~{notice :: notice}"></div>-->
-        </div>
-    </div>
-    <!--            回复输入框-->
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h4>
-            提交回复
-        </h4>
-        <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-sp">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="comment_section">
-            <div class="media">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object img-thumbnail"
-                             th:src="${session.user != null ? session.user.avatarUrl : '/img/default_avatar.png'}">
-                    </a>
-                </div>
-                <div class="media-body">
-                    <h5 class="media-heading">
-                        <a th:href="@{'/article/'+${article.id}}" th:text="${session.user != null ? session.user.name : '未登录用户'}"></a>
-                    </h5>
-                </div>
-            </div>
-            <input type="hidden" id="question_id" th:value="${article.id}">
-            <textarea class="form-control comment" rows="6" id="comment_content"></textarea>
-            <button type="button" class="btn btn-primary btn-comment" onclick="post()">回复</button>
+            <div th:insert="~{notice :: notice}"></div>
         </div>
     </div>
 </div>

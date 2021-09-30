@@ -2,6 +2,7 @@ package com.fool.community.controller;
 
 import com.fool.community.entity.User;
 import com.fool.community.mapper.UserMapper;
+import com.fool.community.service.NotificationService;
 import com.fool.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,13 +25,16 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-    @PostMapping("/logincheck")
-    public String checklogin(HttpServletRequest request, HttpServletResponse response) {
+    @PostMapping("/loginCheck")
+    public String loginCheck(HttpServletRequest request, HttpServletResponse response) {
         //通过request获取输入的用户名和密码在数据库中查找相关用户，如果存在就登录成功
         User user = new User();
         String email = request.getParameter("email");
@@ -45,6 +49,8 @@ public class LoginController {
             userMapper.setTokenAndStatusByUser(user);
             response.addCookie(new Cookie("token", token));
             request.getSession().setAttribute("user",user);
+            long unReadCount=notificationService.countUnReadByUserId(newUser.getId());
+            request.getSession().setAttribute("unReadCount",unReadCount);
         } else {
             //登陆失败，重新登陆
         	return "redirect:/login";

@@ -10,6 +10,7 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+
     //针对GitHub账号登录的处理方法
     public void createOrUpdate(User user) {
         User dbUser=userMapper.findByAccountId(user.getAccountId());

@@ -43,6 +43,14 @@ public class ResultDTO<T> {
         return resultDTO;
     }
 
+    //仅返回成功标志
+    public static ResultDTO noOkOf() {
+        ResultDTO resultDTO = new ResultDTO();
+        resultDTO.setCode(2001);
+        resultDTO.setMessage("未登录");
+        return resultDTO;
+    }
+
     public Integer getCode() {
         return code;
     }
